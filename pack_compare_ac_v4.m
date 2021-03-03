@@ -38,7 +38,7 @@ packkWh_actual = modulekWh_actual .* nModSer .* nModPar;
 
 moduleAh_t = reshape(moduleAh_actual, size(modulekWh,1)*size(moduleV,1),1);
 nBalPack_t = reshape(nBalPack, size(moduleAh_t));
-modulekWh_actual_t = reshape(modulekWh_actual,size(moduleAh_t));
+modulekWh_actual_t = num2str((reshape(modulekWh_actual,size(moduleAh_t))),'%.2f');
 packkWh_actual_t = reshape(packkWh_actual, size(moduleAh_t));
 
 packConfig = cell(size(moduleAh_t));
@@ -60,3 +60,10 @@ T.Properties.RowNames = rowNames;
 T.Properties.VariableNames = varNames;
 disp(title)
 disp(T)
+
+fig = uifigure('HandleVisibility','on');
+% fig.Position = [500 500 520 520];
+t = uitable(fig, 'Data', T);
+%t.Position(3:4) = t.Extent(3:4);
+s = uistyle('HorizontalAlignment', 'center');
+addStyle(t,s);
