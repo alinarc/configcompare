@@ -38,15 +38,23 @@ packkWh_actual = modulekWh_actual .* nModSer .* nModPar;
 
 moduleAh_t = reshape(moduleAh_actual, size(modulekWh,1)*size(moduleV,1),1);
 nBalPack_t = reshape(nBalPack, size(moduleAh_t));
-modulekWh_actual_t = num2str((reshape(modulekWh_actual,size(moduleAh_t))),'%.2f');
+modulekWh_actual_t = reshape(modulekWh_actual,size(moduleAh_t));
+
 packkWh_actual_t = reshape(packkWh_actual, size(moduleAh_t));
 
 packConfig = cell(size(moduleAh_t));
-
+modulekWh_actual_t1 = cell(size(moduleAh_t));
+packkWh_actual_t1 = cell(size(moduleAh_t));
 for i = 1:size(moduleAh_t)
     packConfig{i} = sprintf('%ds%dp', nModSer, nModPar(i));
+    modulekWh_actual_t1{i} = sprintf('%0.2f', modulekWh_actual_t(i));
+    packkWh_actual_t1{i} = sprintf('%0.2f', packkWh_actual_t(i));
 end
+
 packConfig = string(packConfig);
+modulekWh_actual_t1 = string(modulekWh_actual_t1);
+packkWh_actual_t1 = string(packkWh_actual_t1);
+
 varNames = {'Module Ah', 'Module kWh', 'Pack config', '# bal circuits/pack', 'Pack capacity (kWh)'};
 rowNames = cell(size(modulekWh,1), size(moduleV,1));
 for i = 1:size(modulekWh)
@@ -54,7 +62,7 @@ for i = 1:size(modulekWh)
 end
 title = sprintf('Pack comparisons for %g-%g kWh modules. \n Vmod = %g-%g V, Vpack = %g-%g V', ...
     min(modulekWh), max(modulekWh), moduleVmin, moduleVmax, min(packV), max(packV));
-C = {moduleAh_t, modulekWh_actual_t, packConfig, nBalPack_t, packkWh_actual_t};
+C = {moduleAh_t, modulekWh_actual_t1, packConfig, nBalPack_t, packkWh_actual_t1};
 T = table(C{:});
 T.Properties.RowNames = rowNames;
 T.Properties.VariableNames = varNames;
