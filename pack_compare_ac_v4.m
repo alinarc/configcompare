@@ -15,7 +15,7 @@ cellVmax = 3.6;
 cellVmin = 1.5;
 cellVnom = (cellVmax + cellVmin)/2; % use mean cellV to compute modulekWh?
 
-nCellSer = round(moduleV./cellVmax);
+nCellSer = ceil(moduleV./cellVmax);
 moduleVmax = cellVmax * nCellSer;
 moduleVmin = cellVmin * nCellSer;
 moduleVnom = cellVnom * nCellSer;
@@ -34,6 +34,25 @@ packV = nModSer .* [moduleVmin moduleVmax];
 nBalPack = nBalModule .* nModSer' .* nModPar;
 packkWh_actual = modulekWh_actual .* nModSer' .* nModPar;
 
+
+figure
+subplot(1,2,1)
+plot(modulekWh, nBalPack(:,1), '-o', modulekWh, nBalPack(:,2),'-o')
+legend('50 V modules', '100 V modules')
+xlabel('Module capacity (kWh)')
+ylabel(sprintf('# balancing circuits in %d kWh pack', packkWh))
+title('Number of balancing circuits in AC pack for different module configurations')
+xticks(modulekWh')
+xtickangle(45)
+subplot(1,2,2)
+%figure
+plot(modulekWh, packkWh_actual(:,1), '-o', modulekWh, packkWh_actual(:,2), '-o')
+xlabel('Module capacity (kWh)')
+ylabel('Actual pack capacity (kWh)')
+xticks(modulekWh')
+xtickangle(45)
+title('Actual AC pack capacity for different module configurations')
+legend('50 V modules', '100 V modules')
 
 moduleAh_t = reshape(moduleAh_actual, size(modulekWh,1)*size(moduleV,1),1);
 nBalPack_t = reshape(nBalPack, size(moduleAh_t));
@@ -96,6 +115,9 @@ row1 = find(moduleAh_t(1:size(modulekWh)) > balAh);
 col1 = ones(size(row1));
 addStyle(t,s1, 'cell',[row1,col1])
 
+row12 = find(packkWh_actual_t(1:size(modulekWh)) > 600);
+col12 = 5*ones(size(row12));
+addStyle(t,s1,'cell', [row12,col12])
 
 
 t2 = uitable(fig, 'Data', T2, 'Position', [0 0 800 230]);
@@ -107,3 +129,7 @@ title2_obj  = uitextarea(fig, 'Value', title2, 'Position', [0 230 800 20]);
 row2 = find(moduleAh_t(size(modulekWh)+1:end) > balAh);
 col2 = ones(size(row2));
 addStyle(t2, s1, 'cell', [row2, col2])
+
+row22 = find(packkWh_actual_t(size(modulekWh)+1:end) > 600);
+col22 = 5*ones(size(row22));
+addStyle(t2, s1, 'cell', [row22, col22])
