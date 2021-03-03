@@ -24,14 +24,14 @@ reqdAh = modulekWh * 1000 ./ moduleVnom';
 nCellPar = ceil(reqdAh ./ cellAh);
 moduleAh_actual = nCellPar .* cellAh;
 nBalModule = nCellSer' .* ceil(moduleAh_actual ./ balAh);
-modulekWh_actual = nCellSer' .* cellVnom .* moduleAh_actual / 1000 % Andrew used this mean cellV (cellVnom) to compute modulekWh, not sure why
+modulekWh_actual = nCellSer' .* cellVnom .* moduleAh_actual / 1000; % Andrew used this mean cellV (cellVnom) to compute modulekWh, not sure why
 
-nModSer = ceil(packV ./ moduleVmax)
-nModPar = ceil(packkWh ./ (nModSer' .* modulekWh_actual))
+nModSer = ceil(packV ./ moduleVmax);
+nModPar = ceil(packkWh ./ (nModSer' .* modulekWh_actual));
 
 packV = nModSer .* [moduleVmin moduleVmax];
 
-nBalPack = nBalModule * nModSer .* nModPar;
+nBalPack = nBalModule .* nModSer' .* nModPar;
 packkWh_actual = modulekWh_actual .* nModSer' .* nModPar;
 
 
@@ -92,7 +92,7 @@ title1 = sprintf('%gV modules: Vmod = %g-%g V, Vpack = %g-%g V, %g cells in seri
 title1_obj = uitextarea(fig, 'Value', title1,'Position', [0 480 800 20]);
 s1 = uistyle('FontColor', 'r');
 
-row1 = find(moduleAh_t(1:size(modulekWh)) > balAh)
+row1 = find(moduleAh_t(1:size(modulekWh)) > balAh);
 col1 = ones(size(row1));
 addStyle(t,s1, 'cell',[row1,col1])
 
@@ -104,6 +104,6 @@ title2 = sprintf('%gV modules: Vmod = %g-%g V, Vpack = %g-%g V, %g cells in seri
     moduleV(2), moduleVmin(2), moduleVmax(2), min(packV(2,:)), max(packV(2,:)), nCellSer(2));
 title2_obj  = uitextarea(fig, 'Value', title2, 'Position', [0 230 800 20]);
 
-row2 = find(moduleAh_t(size(modulekWh)+1:end) > balAh)
+row2 = find(moduleAh_t(size(modulekWh)+1:end) > balAh);
 col2 = ones(size(row2));
 addStyle(t2, s1, 'cell', [row2, col2])
