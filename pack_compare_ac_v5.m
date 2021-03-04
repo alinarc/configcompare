@@ -44,7 +44,7 @@ nBalModule = nCellSer' .* ceil(moduleAh_actual ./ balAh);
 modulekWh_actual = nCellSer' .* cellVnom .* moduleAh_actual / 1000; % Andrew used this mean cellV (cellVnom) to compute modulekWh, not sure why
 
 nModSer = ceil(packV ./ moduleVmax);
-nModPar = ceil(packkWh ./ (nModSer' .* modulekWh_actual));
+nModPar = round(packkWh ./ (nModSer' .* modulekWh_actual));
 
 packV = nModSer .* [moduleVmin moduleVmax];
 
@@ -63,7 +63,7 @@ xticks(modulekWh')
 xtickangle(45)
 subplot(1,2,2)
 %figure
-plot(modulekWh_actual(:,1), packkWh_actual(:,1), '-o', modulekWh_actual(:,1), packkWh_actual(:,2), '-o')
+plot(modulekWh_actual(:,1), packkWh_actual(:,1), '-o', modulekWh_actual(:,2), packkWh_actual(:,2), '-o')
 xlabel('Module capacity (kWh)')
 ylabel('Actual pack capacity (kWh)')
 xticks(modulekWh')
@@ -112,7 +112,7 @@ disp(T)
 C2 = {moduleAh_t(size(moduleAh_actual,1)+1:end), packConfig(size(moduleAh_actual,1)+1:end), ...
     nBalPack_t(size(moduleAh_actual,1)+1:end), packkWh_actual_t1(size(moduleAh_actual,1)+1:end)};
 T2 = table(C2{:});
-T2.Properties.RowNames = rowNames(1:size(moduleAh_actual,1),1);
+T2.Properties.RowNames = rowNames(size(moduleAh_actual,1)+1:end,1);
 T2.Properties.VariableNames = varNames;
 disp(T2)
 
@@ -150,3 +150,5 @@ addStyle(t2, s1, 'cell', [row2, col2])
 row22 = find(packkWh_actual_t(size(moduleAh_actual,1)+1:end) > 600);
 col22 = 4*ones(size(row22));
 addStyle(t2, s1, 'cell', [row22, col22])
+
+exportapp(fig,'table_500kWh_ac.png')
