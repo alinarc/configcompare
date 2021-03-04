@@ -10,7 +10,10 @@ cellAh = 10;
 
 packV = 1000;
 packVmin = 680;
-packkWh = 400;
+packkWh_eol = 400;
+packpct_eol = 0.8;
+packkWh = packkWh_eol / packpct_eol
+
 cellVmax = 3.6;
 cellVmin = 1.5;
 cellVnom = (cellVmax + cellVmin)/2; % use mean cellV to compute modulekWh?
@@ -129,7 +132,7 @@ row1 = find(moduleAh_t(1:size(moduleAh_actual,1)) > balAh);
 col1 = ones(size(row1));
 addStyle(t,s1, 'cell',[row1,col1])
 
-row12 = find(packkWh_actual_t(1:size(moduleAh_actual,1)) > 550);
+row12 = find(packkWh_actual_t(1:size(moduleAh_actual,1)) > 600);
 col12 = 4*ones(size(row12));
 addStyle(t,s1,'cell', [row12,col12])
 
@@ -144,6 +147,6 @@ row2 = find(moduleAh_t(size(moduleAh_actual,1)+1:end) > balAh);
 col2 = ones(size(row2));
 addStyle(t2, s1, 'cell', [row2, col2])
 
-row22 = find(packkWh_actual_t(size(moduleAh_actual,1)+1:end) > 550);
+row22 = find(packkWh_actual_t(size(moduleAh_actual,1)+1:end) > 600);
 col22 = 4*ones(size(row22));
 addStyle(t2, s1, 'cell', [row22, col22])
