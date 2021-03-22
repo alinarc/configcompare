@@ -8,7 +8,8 @@ modulekWh = 3.5; % fixing module capacity to ~3.5 kWh
 balAh = 100; % limit each balancing circuit to no more than 100 Ah
 cellAh = [10; 50; 100]; % consider diff cell sizes
 
-packV = [680; 1000];
+packV = [680; 1000]; % AC case
+%packV = 50; % DC case
 packVmax = max(packV);
 packkWh_eol = 400;
 packpct_eol = 0.8;
@@ -34,8 +35,8 @@ moduleAh_actual = nCellPar .* cellAh;
 nBalModule = nCellSer .* ceil(moduleAh_actual ./ balAh);
 modulekWh_actual = moduleVnom .* moduleAh_actual / 1000; % Andrew used this mean cellV (cellVnom) to compute modulekWh, not sure why
 
-nModSer = ceil(packVmax ./ moduleVmax);
-nModPar = ceil(packkWh ./ (nModSer .* modulekWh_actual));
+nModSer = floor(packVmax ./ moduleVmax);
+nModPar = round(packkWh ./ (nModSer .* modulekWh_actual));
 
 packV_actual = nModSer .* moduleV_actual;
 packVmax_actual = max(packV_actual, [], 2);

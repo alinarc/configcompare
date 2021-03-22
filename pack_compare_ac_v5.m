@@ -33,14 +33,14 @@ nDAB = round(packkWh ./ kWhDAB);
 packkWh_actual = kWhDAB .* nDAB;
 inputV_DAB = moduleVmax .* nModSer_DAB; % base converter ratio on min or max battery voltage?
 ratio_DAB = packVmax ./ inputV_DAB;
-
+nBalPack = nCellSer .* nModSer_DAB .* nModPar_DAB .* nDAB;
 nMod_t = cell(size(nModSer_DAB));
 for i = 1:size(nMod_t)
     nMod_t{i} = sprintf('%gs%gp', nModSer_DAB(i), nModPar_DAB(i));
 end
     
-C = {string(nMod_t), packkWh_actual, nDAB, ratio_DAB, kWhDAB};
+C = {string(nMod_t), packkWh_actual, nDAB, ratio_DAB, kWhDAB, nBalPack};
 T = table(C{:});
-T.Properties.VariableNames = {'# modules/converter', 'Pack kWh', '# Converters', 'Converter ratio', 'Converter kW'};
-title = sprintf('Dedicated converter vs. shared converters comparison for ',
+T.Properties.VariableNames = {'# modules/converter', 'Pack kWh', '# Converters', 'Converter ratio', 'Converter kW', '# balancing circuits'};
+%title = sprintf('Dedicated converter vs. shared converters comparison for ',
 disp(T)

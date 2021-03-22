@@ -14,7 +14,9 @@ packkWh_eol = 400;
 packpct_eol = 0.8;
 packkWh = packkWh_eol / packpct_eol;
 
-cellV = [2.5 3.65] % use mean cellV to compute modulekWh?
+%cellV = [2.5 3.65] % K2 LFP/Graphite
+%cellV = [1.5 2.9]; % LMO/LTO
+cellV = [1.2 2.5]; % LFP/LTO
 cellVmax = max(cellV);
 cellVnom = mean(cellV,2);
 
@@ -29,7 +31,7 @@ modulekWh_actual = moduleVnom .* balAh / 1000;
 nModSer_DAB = [1;2;3;1;1]; % number of series modules that share a converter
 nModPar_DAB = [1;1;1;2;3];
 kWhDAB = modulekWh_actual .* nModSer_DAB .* nModPar_DAB;
-nDAB = round(packkWh ./ kWhDAB);
+nDAB = ceil(packkWh ./ kWhDAB);
 packkWh_actual = kWhDAB .* nDAB;
 inputV_DAB = moduleVmax .* nModSer_DAB; % base converter ratio on min or max battery voltage?
 ratio_DAB = packVmax ./ inputV_DAB;
