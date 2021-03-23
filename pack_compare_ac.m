@@ -6,11 +6,12 @@
 %
 % To convey these comparisons, this script does 3 things:
 % 1) Generates plots of the number of balancing circuits required and 
-% overall pack capacity vs. the module capacity.
+% overall pack capacity vs. the module capacity. Save these plots to a
+% file.
 % 2) Generates tables summarizing pack comparisons for various sizes of 50
 % V and 100 V modules.
 % 3) Generates these same tables in a matlab uifigure, highlighting in red
-% valure of concern
+% valure of concern. Save these tables to a file.
 
 % This script assumes that each module can contain multiple blocks of 100 
 % Ah connected in parallel (each with a balancing circuit). Each balancing 

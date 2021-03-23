@@ -1,3 +1,8 @@
+%% This script executes the same comparison as pack_compare_ac.m (varying 
+% module capacities and voltages) but for DC-coupled battery packs. This
+% script assumes a dedicated DC-DC converter per battery module, and
+% summarizes pack characteristics for varying modules sizes in plots and
+% tables.
 close all
 clear
 
