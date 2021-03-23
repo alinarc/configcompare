@@ -57,7 +57,8 @@ nBalPack = nBalModule .* nModSer' .* nModPar;
 packkWh_actual = modulekWh_actual .* nModSer' .* nModPar;
 
 
-figure
+f = figure;
+f.Position = [300 298 900 350];
 subplot(1,2,1)
 plot(modulekWh_actual(:,1), nBalPack(:,1), '-o', modulekWh_actual(:,2), nBalPack(:,2),'-o')
 legend('50 V modules', '100 V modules')
@@ -75,6 +76,7 @@ xticks(modulekWh')
 xtickangle(45)
 title('Actual DC pack capacity for different module configurations')
 legend('50 V modules', '100 V modules')
+saveas(gcf, 'plots_dcpack.png')
 
 moduleAh_t = reshape(moduleAh_actual, size(moduleAh_actual,1)*size(moduleV,1),1);
 nBalPack_t = reshape(nBalPack, size(moduleAh_t));
@@ -122,16 +124,17 @@ T2.Properties.RowNames = rowNames(size(moduleAh_actual,1)+1:end,1);
 T2.Properties.VariableNames = varNames;
 disp(T2)
 
-fig = uifigure('HandleVisibility','on','Position', [500 500 800 550]);
+f = uifigure('HandleVisibility','on','Position', [500 500 800 550]);
 % fig.Position = [500 500 520 520];
 
-t = uitable(fig, 'Data', T, 'Position', [0 270 800 250]);
+
+t = uitable(f, 'Data', T, 'Position', [0 270 800 250]);
 %t.Position(3:4) = t.Extent(3:4);
 s = uistyle('HorizontalAlignment', 'center');
 addStyle(t,s);
 title1 = sprintf('%gV modules: Vmod = %g-%g V, %g cells in series', ...
     moduleV(1), moduleVmin(1), moduleVmax(1), nCellSer(1));
-title1_obj = uitextarea(fig, 'Value', title1,'Position', [0 520 800 20]);
+title1_obj = uitextarea(f, 'Value', title1,'Position', [0 520 800 20]);
 s1 = uistyle('FontColor', 'r');
 
 row1 = find(moduleAh_t(1:size(moduleAh_actual,1)) > balAh);
@@ -143,11 +146,11 @@ col12 = 4*ones(size(row12));
 addStyle(t,s1,'cell', [row12,col12])
 
 
-t2 = uitable(fig, 'Data', T2, 'Position', [0 0 800 250]);
+t2 = uitable(f, 'Data', T2, 'Position', [0 0 800 250]);
 addStyle(t2,s);
 title2 = sprintf('%gV modules: Vmod = %g-%g V, %g cells in series', ...
     moduleV(2), moduleVmin(2), moduleVmax(2), nCellSer(2));
-title2_obj  = uitextarea(fig, 'Value', title2, 'Position', [0 250 800 20]);
+title2_obj  = uitextarea(f, 'Value', title2, 'Position', [0 250 800 20]);
 
 row2 = find(moduleAh_t(size(moduleAh_actual,1)+1:end) > balAh);
 col2 = ones(size(row2));
@@ -157,4 +160,4 @@ row22 = find(packkWh_actual_t(size(moduleAh_actual,1)+1:end) > 600);
 col22 = 4*ones(size(row22));
 addStyle(t2, s1, 'cell', [row22, col22])
 
-exportapp(fig,'table_500kWh_dc.png')
+exportapp(gcf,'table_dcpack.png')

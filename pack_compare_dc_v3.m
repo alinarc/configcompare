@@ -6,7 +6,7 @@ format shortg
 moduleV = 50;
 modulekWh = 3.5;
 balAh = 100; % limit each balancing circuit to no more than 100 Ah
-cellAh = [10; 50; 100]
+cellAh = [10; 50; 100];
 
 packV = [680; 1000];
 packVmax = max(packV);
