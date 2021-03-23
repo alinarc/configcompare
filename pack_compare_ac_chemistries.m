@@ -1,3 +1,6 @@
+% This script generates a summary table comparing AC-coupled 
+%battery packs of 50 V,  ~3.5 kWh modules, for cells of three different 
+% chemistries: K2 LFP/Graphite, LMO/LTO, and LFP/LTO
 close all
 clear
 
@@ -29,7 +32,7 @@ moduleVmin = min(moduleV_actual, [], 2);
 moduleVnom = nCellSer .* cellVnom; % nominal module voltage, used to compute capacity
 moduleAh = modulekWh .* 1000 ./ moduleVnom; % may not use this: may just fix moduleAh to 100 for ease of comparison
 
-nCellPar = round(balAh ./ cellAh)
+nCellPar = round(balAh ./ cellAh);
 moduleAh_actual = nCellPar .* cellAh;
 
 nBalModule = nCellSer .* ceil(moduleAh_actual ./ balAh);
@@ -44,34 +47,15 @@ packVmin_actual = min(packV_actual, [], 2);
 nBalPack = nBalModule .* nModSer .* nModPar;
 packkWh_actual = modulekWh_actual .* nModSer .* nModPar;
 
-% figure
-% subplot(1,2,1)
-% plot(modulekWh_actual(:,1), nBalPack(:,1), '-o', modulekWh_actual(:,2), nBalPack(:,2),'-o')
-% legend('50 V modules', '100 V modules')
-% xlabel('Module capacity (kWh)')
-% ylabel(sprintf('# balancing circuits in %d kWh pack', packkWh))
-% title('Number of balancing circuits in AC pack for different module configurations')
-% xticks(modulekWh')
-% xtickangle(45)
-% subplot(1,2,2)
-% %figure
-% plot(modulekWh_actual(:,1), packkWh_actual(:,1), '-o', modulekWh_actual(:,2), packkWh_actual(:,2), '-o')
-% xlabel('Module capacity (kWh)')
-% ylabel('Actual pack capacity (kWh)')
-% xticks(modulekWh')
-% xtickangle(45)
-% title('Actual AC pack capacity for different module configurations')
-% legend('50 V modules', '100 V modules')
-
 cellV_t = cell(size(cellType));
 for i = 1:size(cellV_t)
     cellV_t{i} = sprintf('%g-%g', cellVmin(i), cellVmax(i));
 end
 cellInfo = table(cellType, cellV_t);
 cellInfo.Properties.VariableNames = {'Type', 'Voltage (V)'};
-disp(cellInfo)
+%disp(cellInfo)
 
-moduleConfig = cell(size(cellType,1), size(cellAh,1))
+moduleConfig = cell(size(cellType,1), size(cellAh,1));
 for i = 1:size(moduleConfig,1)
     for j = 1:size(moduleConfig,2)
         moduleConfig{i,j} = sprintf('%gs%gp', nCellSer(i), nCellPar(j));
@@ -82,7 +66,7 @@ varNames1 = {sprintf('%g Ah cells', cellAh(1)), ...
 moduleConfig = string(moduleConfig);
 Module_Config = table(moduleConfig(:,1), moduleConfig(:,2),moduleConfig(:,3));
 Module_Config.Properties.VariableNames = varNames1';
-disp(Module_Config)
+%disp(Module_Config)
 
 modulekWh_actual_t = cell(size(cellType));
 packConfig = cell(size(cellType));
@@ -113,15 +97,3 @@ T = mergevars(T, {'Type', 'V'}, 'NewVariableName', 'Cell info', 'MergeAsTable', 
 T = mergevars(T, {'10 Ah cells','50 Ah cells', '100 Ah cells'},...
     'NewVariableName', 'Module config', 'MergeAsTable', true);
 disp(T)
-
-
-fig = uifigure('HandleVisibility','on','Position', [500 500 600 550]);
-% fig.Position = [500 500 520 520];
-
-t = uitable(fig, 'Data', T, 'Position', [0 270 600 250]);
-%t.Position(3:4) = t.Extent(3:4);
-s = uistyle('HorizontalAlignment', 'center');
-addStyle(t,s);
-
-
-
