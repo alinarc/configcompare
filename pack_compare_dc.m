@@ -160,4 +160,4 @@ row22 = find(packkWh_actual_t(size(moduleAh_actual,1)+1:end) > 600);
 col22 = 4*ones(size(row22));
 addStyle(t2, s1, 'cell', [row22, col22])
 
-exportapp(gcf,'table_dcpack.png')
+exportapp(f,'table_dcpack.png')

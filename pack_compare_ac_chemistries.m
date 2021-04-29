@@ -24,28 +24,31 @@ cellVnom = mean(cellV,2); % use mean cellV to compute modulekWh
 cellVmax = max(cellV, [], 2);
 cellVmin = min(cellV, [], 2);
 
-nCellSer = ceil(moduleV./cellVmax);
+[nBlockSer, modulekWh_actual, nModSer, nModPar, packkWh_actual] = ...
+    get_ac_layout(cellV, balAh, modulekWh, packkWh, moduleV, packV);
 
-moduleV_actual = nCellSer .* cellV; % max and min of module voltage
+%nBlockSer = ceil(moduleV./cellVmax);
+
+moduleV_actual = nBlockSer .* cellV; % max and min of module voltage
 moduleVmax = max(moduleV_actual, [], 2);
 moduleVmin = min(moduleV_actual, [], 2);
-moduleVnom = nCellSer .* cellVnom; % nominal module voltage, used to compute capacity
+moduleVnom = nBlockSer .* cellVnom; % nominal module voltage, used to compute capacity
 moduleAh = modulekWh .* 1000 ./ moduleVnom; % may not use this: may just fix moduleAh to 100 for ease of comparison
 
 nCellPar = round(balAh ./ cellAh);
 moduleAh_actual = nCellPar .* cellAh;
 
-nBalModule = nCellSer .* ceil(moduleAh_actual ./ balAh);
-modulekWh_actual = moduleVnom .* moduleAh_actual / 1000; % Andrew used this mean cellV (cellVnom) to compute modulekWh, not sure why
+nBalModule = nBlockSer .* ceil(moduleAh_actual ./ balAh);
+%modulekWh_actual = moduleVnom .* moduleAh_actual / 1000; % Andrew used this mean cellV (cellVnom) to compute modulekWh, not sure why
 
-nModSer = floor(packVmax ./ moduleVmax);
-nModPar = round(packkWh ./ (nModSer .* modulekWh_actual));
+%nModSer = floor(packVmax ./ moduleVmax);
+%nModPar = round(packkWh ./ (nModSer .* modulekWh_actual));
 
 packV_actual = nModSer .* moduleV_actual;
 packVmax_actual = max(packV_actual, [], 2);
 packVmin_actual = min(packV_actual, [], 2);
 nBalPack = nBalModule .* nModSer .* nModPar;
-packkWh_actual = modulekWh_actual .* nModSer .* nModPar;
+%packkWh_actual = modulekWh_actual .* nModSer .* nModPar;
 
 cellV_t = cell(size(cellType));
 for i = 1:size(cellV_t)
@@ -58,7 +61,7 @@ cellInfo.Properties.VariableNames = {'Type', 'Voltage (V)'};
 moduleConfig = cell(size(cellType,1), size(cellAh,1));
 for i = 1:size(moduleConfig,1)
     for j = 1:size(moduleConfig,2)
-        moduleConfig{i,j} = sprintf('%gs%gp', nCellSer(i), nCellPar(j));
+        moduleConfig{i,j} = sprintf('%gs%gp', nBlockSer(i), nCellPar(j));
     end
 end
 varNames1 = {sprintf('%g Ah cells', cellAh(1)), ...
