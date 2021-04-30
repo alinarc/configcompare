@@ -1,3 +1,6 @@
+% This script generates a table summarizing the effects of connecting
+% modules in series to a DC-DC converter in the modular pack, for one cell
+% chemistry.
 close all
 clear
 
@@ -14,9 +17,9 @@ packkWh_eol = 400;
 packpct_eol = 0.8;
 packkWh = packkWh_eol / packpct_eol;
 
-%cellV = [2.5 3.65] % K2 LFP/Graphite
+cellV = [2.5 3.65]; % K2 LFP/Graphite
 %cellV = [1.5 2.9]; % LMO/LTO
-cellV = [1.2 2.5]; % LFP/LTO
+%cellV = [1.2 2.5]; % LFP/LTO
 cellVmax = max(cellV);
 cellVnom = mean(cellV,2);
 
